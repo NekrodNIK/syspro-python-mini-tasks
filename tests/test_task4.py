@@ -18,6 +18,7 @@ def test_general():
 
     assert reverse_dict(request) == expected
 
+
 def test_raise_error():
     with pytest.raises(TypeError):
         reverse_dict({1: []})
