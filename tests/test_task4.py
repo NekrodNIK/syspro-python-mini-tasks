@@ -1,4 +1,5 @@
 from src.task4 import reverse_dict
+import pytest
 
 
 def test_example():
@@ -16,3 +17,7 @@ def test_general():
     }
 
     assert reverse_dict(request) == expected
+
+def test_raise_error():
+    with pytest.raises(TypeError):
+        reverse_dict({1: []})
