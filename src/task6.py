@@ -11,4 +11,3 @@ def flatten(obj: Iterable, depth=float("inf")) -> list:
             result.append(el)
 
     return result
-

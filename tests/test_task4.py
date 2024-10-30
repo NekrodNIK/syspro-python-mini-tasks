@@ -1,5 +1,6 @@
-from src.task4 import reverse_dict
 import pytest
+
+from src.task4 import reverse_dict
 
 
 def test_example():
