@@ -19,6 +19,7 @@ def deprecated(func=None, *, since=None, will_be_removed=None) -> Callable:
         )
     )
 
+    @functools.wraps(func)
     def wrapper(*args, **kwargs):
         print(out)
 
