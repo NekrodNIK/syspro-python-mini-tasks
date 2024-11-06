@@ -30,5 +30,3 @@ def format_table(benchmarks: list[str], algos: list[str], results: list[list]):
         print()
         if i == 0:
             print(f"|{"-" * (sum(length) + 3 * M - 1)}|")
-
-
