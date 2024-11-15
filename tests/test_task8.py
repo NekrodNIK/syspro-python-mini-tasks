@@ -3,16 +3,16 @@ from pytest import CaptureFixture
 
 
 expected = """\
-| Benchmark  | quick sort | merge sort | bubble sort |
-|----------------------------------------------------|
-| best case  | 1.23       | 1.56       | 2.0         |
-| worst case | 3.3        | 2.9        | 3.9         |
+| Benchmark | quick sort | merge sort | bubble sort |
+|---------------------------------------------------|
+| best      | 1.23       | 1.56       | 2.0         |
+| worst     | 3.3        | 2.9        | 3.9         |
 """
 
 
 def test(capsys: CaptureFixture):
     format_table(
-        ["best case", "worst case"],
+        ["best", "worst"],
         ["quick sort", "merge sort", "bubble sort"],
         [[1.23, 1.56, 2.0], [3.3, 2.9, 3.9]],
     )
