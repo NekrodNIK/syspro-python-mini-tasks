@@ -1,28 +1,48 @@
-import heapq
+from heapq import heapify, heappush, heapreplace
+from collections.abc import Hashable
+from dataclasses import dataclass
+from typing import Any
 
 
 class LRUCache:
+    @dataclass(order=True)
+    class Element:
+        priority: int
+        key: Hashable
+        value: Any
+
     def __init__(self, capacity=16):
         self.__capacity = capacity
-        self.__cache = []
+        self.__filling = 0
 
-    def put(self, key, value):
-        args = self.__cache, [0, key, value]
+        self.__heap: list[LRUCache.Element] = []
+        self.__dict: dict[Hashable, LRUCache.Element] = {}
 
-        if len(self.__cache) >= self.__capacity:
-            heapq.heapreplace(*args)
+    def put(self, key: Hashable, value):
+        el = LRUCache.Element(0, key, value)
+
+        if self.__filling < self.__capacity:
+            heappush(self.__heap, el)
+            self.__filling += 1
         else:
-            heapq.heappush(*args)
+            popped_el = heapreplace(self.__heap, el)
+            self.__dict.pop(popped_el.key)
 
-    def get(self, key):
-        for i in range(len(self.__cache)):
-            _, k, v = self.__cache[i]
-            if k != key:
-                continue
+        self.__dict[key] = el
 
-            self.__cache[i][0] += 1
-            heapq.heapify(self.__cache)
+    def get(self, key: Hashable):
+        el = self.__dict.get(key, None)
+        if el is None:
+            return None
 
-            return v
+        el.priority += 1
+        heapify(self.__heap)
+        return el.value
 
-        return None
+    @property
+    def capacity(self):
+        return self.__capacity
+
+    @property
+    def filling(self):
+        return self.__filling
