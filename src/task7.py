@@ -1,5 +1,5 @@
-from collections.abc import Callable
 import functools
+from collections.abc import Callable
 
 
 def deprecated(func=None, *, since=None, will_be_removed=None) -> Callable:

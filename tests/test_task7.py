@@ -1,5 +1,6 @@
-from src.task7 import deprecated
 from pytest import CaptureFixture
+
+from src.task7 import deprecated
 
 
 @deprecated

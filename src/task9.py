@@ -1,6 +1,6 @@
-from heapq import heapify, heappush, heapreplace
 from collections.abc import Hashable
 from dataclasses import dataclass
+from heapq import heapify, heappush, heapreplace
 from typing import Any
 
 

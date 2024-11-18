@@ -1,6 +1,6 @@
-from src.task8 import format_table
 from pytest import CaptureFixture
 
+from src.task8 import format_table
 
 expected = """\
 | Benchmark | quick sort | merge sort | bubble sort |
