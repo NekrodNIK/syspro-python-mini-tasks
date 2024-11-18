@@ -18,7 +18,7 @@ class LRUCache:
         self.__heap: list[LRUCache.Element] = []
         self.__dict: dict[Hashable, LRUCache.Element] = {}
 
-    def put(self, key: Hashable, value):
+    def put(self, key: Hashable, value: Any):
         el = LRUCache.Element(0, key, value)
 
         if self.__filling < self.__capacity:
@@ -38,11 +38,3 @@ class LRUCache:
         el.priority += 1
         heapify(self.__heap)
         return el.value
-
-    @property
-    def capacity(self):
-        return self.__capacity
-
-    @property
-    def filling(self):
-        return self.__filling

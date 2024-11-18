@@ -14,8 +14,8 @@ def test():
 
     cache.get('a')
     cache.get('b')
-    cache.put('d', 4)
 
-    assert cache.get('c') == None
+    cache.put('d', 4)
     assert cache.get('d') == 4
+    assert cache.get('c') == None
     
