@@ -12,10 +12,8 @@ def test_cycle():
 
     assert saved == [1, 2, 3] * 10
             
-        
+
 def test_chain():
-    saved = []
-    for element in chain((1, 2, 3), [4, 5, 6], "789"):
-        saved.append(element)
+    saved = list(chain((1, 2, 3), [4, 5, 6], "789"))
 
     assert saved == [1, 2, 3, 4, 5, 6, "7", "8", "9"]
