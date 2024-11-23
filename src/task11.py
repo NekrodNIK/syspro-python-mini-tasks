@@ -12,6 +12,5 @@ def cycle(iterable: Iterable) -> Iterable:
 
 def chain(*args: Iterable) -> Iterable:
     for iterable in args:
-        for element in iterable:
-            yield element
+        yield from iterable
                 
