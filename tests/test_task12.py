@@ -2,7 +2,11 @@ from src.task12 import coroutine
 
 def test():
     @coroutine
-    def func():
-        return iter([1, 2, 3, 4, 5])
+    def func(i):
+        while True:
+            j = yield
+            assert j == i
 
-    assert list(func()) == [2, 3, 4, 5]
+    for i in range(100):
+        it = func(i)
+        it.send(i)

@@ -7,8 +7,7 @@ def cycle(iterable: Iterable) -> Iterable:
         saved.append(element)
 
     while saved:
-        for element in saved:
-            yield element
+        yield from saved
 
 def chain(*args: Iterable) -> Iterable:
     for iterable in args:
