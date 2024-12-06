@@ -31,13 +31,13 @@ PyObject* multiply(PyObject* A, PyObject* B) {
 
 static PyObject* foreign_matrix_power(PyObject* self, PyObject* args) {
   PyObject* matrix;
-  int power;
+  unsigned power;
 
-  if (!PyArg_ParseTuple(args, "Oi", &matrix, &power))
+  if (!PyArg_ParseTuple(args, "OI", &matrix, &power))
     return NULL;
 
   PyObject* result = matrix;
-  for (size_t i = 1; i < power; i++) {
+  for (unsigned i = 1; i < power; i++) {
     result = multiply(result, matrix);
   }
 
