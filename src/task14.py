@@ -3,6 +3,23 @@ import random
 from time import time
 from matplotlib import pyplot as plt
 
+run_time = []
+
+
+def print_time(func):
+    def wrapper(*args, **kwargs):
+        start = time()
+
+        result = func()
+        end = time()
+        print(end - start)
+        run_time.append(end - start)
+
+        return result
+
+    return wrapper
+
+
 def step(matrix, next_matrix):
     N = len(matrix)
     M = len(matrix[0])
@@ -16,7 +33,10 @@ def step(matrix, next_matrix):
                 if k != i and l != j
             )
 
-            next_matrix[i][j] = int((neighbours == 2 and arr[i][j]) or neighbours == 3)
+            next_matrix[i][j] = int(
+                (neighbours == 2 and matrix[i][j]) or neighbours == 3
+            )
+
 
 def step_numpy_vectorization(matrix):
     matrix = np.array(matrix)
@@ -24,7 +44,13 @@ def step_numpy_vectorization(matrix):
 
     padded_matrix = np.pad(matrix, pad_width=1, mode="wrap")
 
-    kernel = np.array([[1, 1, 1], [1, 0, 1], [1, 1, 1]])
+    kernel = np.array(
+        [
+            [1, 1, 1],
+            [1, 0, 1],
+            [1, 1, 1],
+        ]
+    )
 
     neighbours = np.convolve(
         padded_matrix.flatten(), kernel.flatten(), mode="same"
@@ -36,42 +62,45 @@ def step_numpy_vectorization(matrix):
 
 
 N = M = 128
-arr = [[random.randint(0, 1) for _ in range(M)] for _ in range(N)]
-arr_numpy = np.array(arr)
+DATA = [[random.randint(0, 1) for _ in range(M)] for _ in range(N)]
 
-start_time = time()
 
-next_arr = [[0] * M for _ in range(N)]
-for _ in range(128):
-    step(arr, next_arr)
-    arr = next_arr
+@print_time
+def run_list():
+    arr = list(DATA)
+    next_arr = [[0] * M for _ in range(N)]
 
-end_time = time()
+    for _ in range(128):
+        step(arr, next_arr)
+        arr, next_arr = next_arr, arr
 
-t1 = end_time - start_time
 
-start_time = time()
+@print_time
+def run_numpy():
+    arr = np.array(DATA)
+    next_arr = np.zeros((M, N))
 
-next_arr_numpy = np.zeros((M, N))
-for _ in range(128):
-    step(arr, next_arr_numpy)
-    arr_numpy = next_arr_numpy
+    for _ in range(128):
+        step(arr, next_arr)
+        arr, next_arr = next_arr, arr
 
-end_time = time()
-t2 = end_time - start_time
+    return arr
 
-start_time = time()
 
-for _ in range(128):
-    arr_numpy = step_numpy_vectorization(arr_numpy)
+@print_time
+def run_numpy_vectorization():
+    arr = np.array(DATA)
 
-end_time = time()
-t3 = end_time - start_time
+    for _ in range(128):
+        arr = step_numpy_vectorization(arr)
 
-assert not np.array_equal(np.array(arr), arr_numpy)
+    return arr
 
-print(t1)
-print(t2)
-print(t3)
-plt.bar(("Обычный массив", "numpy", "numpy с векторизацией"), (t1, t2, t3))
+
+r1 = run_list()
+r2 = run_numpy()
+r3 = run_numpy_vectorization()
+assert not np.array_equal(np.array(r1), r2) or not np.array_equal(r2, r3)
+
+plt.bar(("Обычный массив", "numpy", "numpy с векторизацией"), run_time)
 plt.show()
