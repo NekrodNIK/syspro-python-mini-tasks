@@ -3,11 +3,10 @@ import random
 from time import time
 from matplotlib import pyplot as plt
 
-def step(matrix):
+def step(matrix, next_matrix):
     N = len(matrix)
     M = len(matrix[0])
 
-    next_matrix = [[0] * M for _ in range(N)]
     for i in range(N):
         for j in range(M):
             neighbours = sum(
@@ -19,10 +18,7 @@ def step(matrix):
 
             next_matrix[i][j] = int((neighbours == 2 and arr[i][j]) or neighbours == 3)
 
-    return next_matrix
-
-
-def step_numpy(matrix):
+def step_numpy_vectorization(matrix):
     matrix = np.array(matrix)
     N, M = matrix.shape
 
@@ -45,8 +41,10 @@ arr_numpy = np.array(arr)
 
 start_time = time()
 
+next_arr = [[0] * M for _ in range(N)]
 for _ in range(128):
-    arr = step(arr)
+    step(arr, next_arr)
+    arr = next_arr
 
 end_time = time()
 
@@ -54,15 +52,26 @@ t1 = end_time - start_time
 
 start_time = time()
 
+next_arr_numpy = np.zeros((M, N))
 for _ in range(128):
-    arr_numpy = step_numpy(arr_numpy)
+    step(arr, next_arr_numpy)
+    arr_numpy = next_arr_numpy
 
 end_time = time()
-
 t2 = end_time - start_time
+
+start_time = time()
+
+for _ in range(128):
+    arr_numpy = step_numpy_vectorization(arr_numpy)
+
+end_time = time()
+t3 = end_time - start_time
+
 assert not np.array_equal(np.array(arr), arr_numpy)
 
 print(t1)
 print(t2)
-plt.bar(("Обычный массив", "numpy"), (t1, t2))
+print(t3)
+plt.bar(("Обычный массив", "numpy", "numpy с векторизацией"), (t1, t2, t3))
 plt.show()
